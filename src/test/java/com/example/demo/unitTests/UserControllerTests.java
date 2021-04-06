@@ -74,7 +74,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void createUser_noUsername_ReturnStatusNotAcceptable406()throws Exception{
+    public void createUser_noUsername_ReturnStatusBadRequest400()throws Exception{
         // Arrange
         CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setPassword("password");
@@ -84,11 +84,11 @@ public class UserControllerTests {
         MvcResult mvcResult = mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(createUserRequest)))
-                .andExpect(status().isNotAcceptable()).andReturn();
+                .andExpect(status().isBadRequest()).andReturn();
     }
 
     @Test
-    public void createUser_noPassword_ReturnStatusNotAcceptable406()throws Exception{
+    public void createUser_noPassword_ReturnStatusBadRequest400()throws Exception{
         // Arrange
         CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setUsername("username");
@@ -98,7 +98,7 @@ public class UserControllerTests {
         MvcResult mvcResult = mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(createUserRequest)))
-                .andExpect(status().isNotAcceptable()).andReturn();
+                .andExpect(status().isBadRequest()).andReturn();
     }
 
     @Test

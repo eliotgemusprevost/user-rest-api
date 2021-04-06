@@ -42,7 +42,7 @@ public class UserController {
 
         if(requestedUsername == null || requestedUsername.isEmpty()
                 || requestedPassword == null || requestedPassword.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Long createdId = userRepository.createUser(requestBody.getUsername(),requestBody.getPassword());
         return new ResponseEntity<>(createdId, HttpStatus.OK);
