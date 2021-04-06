@@ -5,8 +5,6 @@ import com.example.demo.models.AuthenticationRequest;
 import com.example.demo.pojo.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,13 +15,14 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTests {
+public class ControllerTests {
 
     @LocalServerPort
     private int port;
@@ -39,20 +38,58 @@ public class UserControllerTests {
     }
 
     @Test
-    public void testRetrieveStudentCourse() throws JSONException, JsonProcessingException {
-
+    public void canGetAllUser() {
+        // Setup header and information for http call
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + this.token);
+        ParameterizedTypeReference<List<User>> responseType = new ParameterizedTypeReference<>() {};
+        HttpEntity<String> entity = new HttpEntity<>("",headers);
 
-        ParameterizedTypeReference<List<User>> responseType = new ParameterizedTypeReference<List<User>>() {};
-
-        HttpEntity<String> entity = new HttpEntity<String>("",headers);
+        // Call the endpoint and retrieve the answer
         ResponseEntity<List<User>> result = restTemplate.exchange(createURL("/users/all"), HttpMethod.GET, entity, responseType);
-        Iterable users = Arrays.asList(result.getBody());
+        Object responseBody = result.getBody();
+        Iterable<User> users = (Iterable<User>) responseBody;
 
-        JSONObject json = (JSONObject) ((List<?>) users).get(0);
+        // The total user is hardcoded as  2 by default
+        assertTrue(2 == ((List<?>) users).size());
     }
+
+    @Test
+    public void canCreateUser() {
+        //TODO:implement canCreateUser test
+    }
+
+    @Test
+    public void canDeleteUser() {
+        //TODO:implement canDeleteUser test
+    }
+
+    @Test
+    public void canUpdateUser() {
+        //TODO:implement canUpdateUser test
+    }
+
+    @Test
+    public void canGetSpecificUser() {
+        //TODO:implement canGetSpecificUser test
+    }
+
+    @Test
+    public void cannotGetSpecificUserThatDoesNotExist() {
+        //TODO:implement cannotGetUserThatDoesNotExist test
+    }
+
+    @Test
+    public void cannotUpdateUserThatDoesNotExist() {
+        //TODO:implement cannotUpdateUserThatDoesNotExist test
+    }
+
+    @Test
+    public void cannotDeleteUserThatDoesNotExist() {
+        //TODO:implement cannotDeleteUserThatDoesNotExist test
+    }
+
 
     private String createURL(String uri) {
         return "http://localhost:" + port + uri;
